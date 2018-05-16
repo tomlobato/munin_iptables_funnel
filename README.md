@@ -67,7 +67,7 @@ graph_category Firewall DNS
 graph_title Packets/s  
 graph_vlabel packets/s  
 graph_args --base 1000 -l 0  
-
+  
 dns_all.label dns_all  
 dns_all.type DERIVE  
 dns_all.min 0  
