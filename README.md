@@ -58,23 +58,21 @@ munin-run iptables_stat_dns config
 > graph_vlabel packets/s  
 > graph_args --base 1000 -l 0  
 
-<sub><sup>
-dns_all.label dns_all  
-dns_all.type DERIVE  
-dns_all.min 0  
-dns_br.label dns_br  
-dns_br.type DERIVE  
-dns_br.min 0  
-dns_bl.label dns_bl  
-dns_bl.type DERIVE  
-dns_bl.min 0  
-dns_overrate.label dns_overrate  
-dns_overrate.type DERIVE  
-dns_overrate.min 0  
-dns_accept.label dns_accept  
-dns_accept.type DERIVE  
-dns_accept.min 0  
-</sup></sub>
+> dns_all.label dns_all  
+> dns_all.type DERIVE  
+> dns_all.min 0  
+> dns_br.label dns_br  
+> dns_br.type DERIVE  
+> dns_br.min 0  
+> dns_bl.label dns_bl  
+> dns_bl.type DERIVE  
+> dns_bl.min 0  
+> dns_overrate.label dns_overrate  
+> dns_overrate.type DERIVE  
+> dns_overrate.min 0  
+> dns_accept.label dns_accept  
+> dns_accept.type DERIVE  
+> dns_accept.min 0  
 
 ```
 munin-run iptables_stat_dns
