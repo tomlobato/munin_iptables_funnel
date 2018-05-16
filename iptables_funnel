@@ -1,0 +1,98 @@
+#!/root/.rbenv/shims/ruby
+
+class MuninIptablesFunnel
+
+    SECTIONS = %w(
+        DNS_ALL     
+        DNS_GLOBAL  
+        DNS_BR      
+        DNS_BL     
+        DNS_OVERRATE
+        DNS_ACCEPT   
+    )
+
+    def initialize argv
+        @argv = argv
+    end
+        
+    def cli 
+        case @argv[0]
+        when 'config'
+            config
+        when 'install'
+            install
+        else
+            run
+        end
+    end
+
+    private
+
+    def config
+        puts <<-CONFIG
+graph_category Firewall DNS
+graph_title Packets/s
+graph_vlabel packets/s
+graph_args --base 1000 -l 0
+
+CONFIG
+
+        SECTIONS.each do |section|
+            s = section.downcase
+            puts "#{s}.label #{s}"
+            puts "#{s}.type DERIVE"
+            puts "#{s}.min 0"
+        end
+
+        exit 0
+    end
+
+    def run
+        get_stats.each_pair do |k, v|
+            puts "#{k}.value #{ v || 0 }"
+        end
+
+        exit 0
+    end
+
+    # Util
+
+    def get_stats
+        stat = {}
+        section = nil
+        section_line = 0
+
+        `iptables -v -x -n -L`.each_line do |_l|
+            l = _l.strip
+            if l =~ /^Chain\s+(#{SECTIONS.join '|'})(\s+|$)/
+                section = $1.downcase
+                section_line = 0
+            elsif section
+                section_line += 1
+                if section_line == 2
+                    if l =~ /^(\d+)/
+                        stat[section] = $1.to_i
+                    end
+                end
+            end
+        end
+
+        stat
+    end
+
+    def install
+        target = File.expand_path(__FILE__)
+        system "ln -s #{target} /etc/munin/plugins/iptables_funnel"
+
+        # munin_node_conf
+        munin_node_conf = "\n[iptables_funnel]\nuser root\n\n"
+        File.open('/etc/munin/plugin-conf.d/munin-node', 'a').write munin_node_conf
+    end
+
+    def error msg
+        STDERR.puts msg
+        exit 1
+    end
+end
+
+MuninIptablesFunnel.new(ARGV).cli
