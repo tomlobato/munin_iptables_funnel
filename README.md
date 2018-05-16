@@ -25,7 +25,7 @@ iptables -N DNS_GLOBAL          2> /dev/null
 iptables -N DNS_BR              2> /dev/null
 iptables -N DNS_ACCEPT          2> /dev/null
 
-ipset_lists aws                 > /dev/null
+ipset_lists bl                  > /dev/null
 ipset_lists country_br          > /dev/null
 
 iptables -A INPUT -p udp --dport 53 -i $IF0 -j DNS
@@ -42,8 +42,8 @@ iptables -A DNS_GLOBAL -j RETURN
 iptables -A DNS -m set --match-set country_br src -j DNS_BR
 iptables -A DNS_BR -j RETURN
 
-# AWS
-iptables -A DNS -m set --match-set aws src -j DNS_BL
+# BL
+iptables -A DNS -m set --match-set bl src -j DNS_BL
 iptables -A DNS_BL -j DROP
 
 # RATE
@@ -97,7 +97,7 @@ munin-run munin_iptables_funnel
 <sub><sup>
 dns_accept.value 128046  
 dns_all.value 6232044  
-dns_aws.value 5841360  
+dns_bl.value 5841360  
 dns_br.value 8401  
 dns_global.value 6232044  
 dns_overrate.value 262638  
