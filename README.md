@@ -1,5 +1,5 @@
 
-Sample Graphs:
+Sample:
 
 ![sample graphs](https://github.com/tomlobato/munin_iptables_funnel/blob/master/sample.png)
 
