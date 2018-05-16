@@ -11,6 +11,8 @@ mv iptables_funnel /usr/local/sbin/
 iptables_funnel install
 ```
 
+# Configure
+
 Then add custom user chains to iptables. Example:
 
 ```bash
