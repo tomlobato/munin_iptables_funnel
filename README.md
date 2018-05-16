@@ -53,12 +53,10 @@ Reload your firewall, then test:
 munin-run iptables_stat_dns config
 ```
 
-<sub><sup>
-graph_category Firewall DNS  
-graph_title Packets/s  
-graph_vlabel packets/s  
-graph_args --base 1000 -l 0  
-</sup></sub>
+> graph_category Firewall DNS  
+> graph_title Packets/s  
+> graph_vlabel packets/s  
+> graph_args --base 1000 -l 0  
 
 <sub><sup>
 dns_all.label dns_all  
