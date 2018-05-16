@@ -59,8 +59,38 @@ iptables -A DNS_ACCEPT -j ACCEPT
 Reload your firewall, then test:
 
 ```bash
-munin-run munin_iptables_funnel config
-munin-run munin_iptables_funnel
+*munin-run munin_iptables_funnel config*
+graph_category Firewall DNS
+graph_title Packets/s
+graph_vlabel packets/s
+graph_args --base 1000 -l 0
+
+dns_all.label dns_all
+dns_all.type DERIVE
+dns_all.min 0
+dns_global.label dns_global
+dns_global.type DERIVE
+dns_global.min 0
+dns_br.label dns_br
+dns_br.type DERIVE
+dns_br.min 0
+dns_aws.label dns_aws
+dns_aws.type DERIVE
+dns_aws.min 0
+dns_overrate.label dns_overrate
+dns_overrate.type DERIVE
+dns_overrate.min 0
+dns_accept.label dns_accept
+dns_accept.type DERIVE
+dns_accept.min 0
+
+*munin-run munin_iptables_funnel*
+dns_accept.value 128046
+dns_all.value 6232044
+dns_aws.value 5841360
+dns_br.value 8401
+dns_global.value 6232044
+dns_overrate.value 262638
 ```
 
 And Finally:
