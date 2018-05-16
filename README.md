@@ -28,7 +28,6 @@ iptables -N DNS 2> /dev/null
 
 iptables -A INPUT -p udp --dport 53 -i $IF0 -j DNS
 iptables -A INPUT -p tcp --dport 53 -i $IF0 -j DNS
-iptables -A DNS -j NFLOG
 iptables -A DNS -m comment --comment 'DNS_ALL'
 
 # WHERE?
