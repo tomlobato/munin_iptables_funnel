@@ -9,7 +9,7 @@ wget https://raw.githubusercontent.com/tomlobato/munin_iptables_stat/master/ipta
 chmod 755 iptables_stat_
 mv iptables_stat_ /usr/local/sbin/
 # sample: dns
-iptables_stat_ install dns 'Firewall DNS' 'DNS_ALL DNS_BR DNS_AWS DNS_OVERRATE DNS_ACCEPT'
+iptables_stat_ install dns 'Firewall DNS' 'DNS_ALL DNS_BR DNS_BL DNS_OVERRATE DNS_ACCEPT'
 ```
 
 # Configure
@@ -32,9 +32,9 @@ iptables -A DNS -m comment --comment 'DNS_ALL'
 ipset_lists country_br > /dev/null
 iptables -A DNS -m set --match-set country_br src -m comment --comment 'DNS_BR'
 
-# AWS
-ipset_lists aws > /dev/null
-iptables -A DNS -m set --match-set aws src -j DROP -m comment --comment 'DNS_AWS'
+# BL
+ipset_lists bl > /dev/null
+iptables -A DNS -m set --match-set bl src -j DROP -m comment --comment 'DNS_BL'
 
 # RATE
 iptables -A DNS -m state --state NEW -m recent --set
