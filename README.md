@@ -4,10 +4,10 @@
 As root, run:
 
 ```bash
-wget https://raw.githubusercontent.com/tomlobato/munin_iptables_funnel/master/munin_iptables_funnel
-chmod 755 munin_iptables_funnel
-mv munin_iptables_funnel /usr/local/sbin/
-munin_iptables_funnel install
+wget https://raw.githubusercontent.com/tomlobato/munin_iptables_funnel/master/iptables_funnel
+chmod 755 iptables_funnel
+mv iptables_funnel /usr/local/sbin/
+iptables_funnel install
 ```
 
 Then add custom user chains to iptables. Example:
@@ -59,7 +59,7 @@ iptables -A DNS_ACCEPT -j ACCEPT
 Reload your firewall, then test:
 
 ```bash
-munin-run munin_iptables_funnel config
+munin-run iptables_funnel config
 ```
 
 <sub><sup>
@@ -91,7 +91,7 @@ dns_accept.min 0
 </sup></sub>
 
 ```
-munin-run munin_iptables_funnel
+munin-run iptables_funnel
 ```
 
 <sub><sup>
