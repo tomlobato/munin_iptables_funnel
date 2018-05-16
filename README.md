@@ -8,11 +8,14 @@ As root, run:
 wget https://raw.githubusercontent.com/tomlobato/munin_iptables_stat/master/iptables_stat_
 chmod 755 iptables_stat_
 mv iptables_stat_ /usr/local/sbin/
-# sample: dns
-iptables_stat_ install dns 'Firewall DNS' 'DNS_ALL DNS_BR DNS_BL DNS_OVERRATE DNS_ACCEPT'
 ```
 
 # Configure
+
+```
+# sample: dns
+iptables_stat_ install dns 'Firewall DNS' 'DNS_ALL DNS_BR DNS_BL DNS_OVERRATE DNS_ACCEPT'
+```
 
 Then add custom user chains to iptables. Example:
 
