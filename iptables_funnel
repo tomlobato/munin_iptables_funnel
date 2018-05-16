@@ -1,18 +1,12 @@
 #!/root/.rbenv/shims/ruby
 
-class MuninIptablesFunnel
-
-    SECTIONS = %w(
-        DNS_ALL     
-        DNS_GLOBAL  
-        DNS_BR      
-        DNS_BL     
-        DNS_OVERRATE
-        DNS_ACCEPT   
-    )
-
+class MuninIptablesStat
     def initialize argv
         @argv = argv
+        @tags = ENV['TAGS']
+            .to_s
+            .strip
+            .split(/\s+/)
     end
         
     def cli 
@@ -30,18 +24,18 @@ class MuninIptablesFunnel
 
     def config
         puts <<-CONFIG
-graph_category Firewall DNS
+graph_category #{ENV['GRAPH_TITLE']}
 graph_title Packets/s
 graph_vlabel packets/s
 graph_args --base 1000 -l 0
 
 CONFIG
 
-        SECTIONS.each do |section|
-            s = section.downcase
-            puts "#{s}.label #{s}"
-            puts "#{s}.type DERIVE"
-            puts "#{s}.min 0"
+        @tags.each do |tag|
+            t = tag.downcase
+            puts "#{t}.label #{t}"
+            puts "#{t}.type DERIVE"
+            puts "#{t}.min 0"
         end
 
         exit 0
@@ -59,33 +53,43 @@ CONFIG
 
     def get_stats
         stat = {}
-        section = nil
-        section_line = 0
 
-        `iptables -v -x -n -L`.each_line do |_l|
-            l = _l.strip
-            if l =~ /^Chain\s+(#{SECTIONS.join '|'})(\s+|$)/
-                section = $1.downcase
-                section_line = 0
-            elsif section
-                section_line += 1
-                if section_line == 2
-                    if l =~ /^(\d+)/
-                        stat[section] = $1.to_i
-                    end
-                end
+        # Sample line:
+        #     641    45979 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0            /* DNS_ACCEPT */
+        reg = /
+            ^\s*
+            (\d+)
+            .*
+            \/\*\s(#{ @tags.join '|' })\s\*\/
+        /x
+
+        `iptables -v -x -n -L`.each_line do |line|
+            if line =~ reg
+                stat[$2.downcase] = $1.to_i
             end
         end
 
         stat
     end
 
+    # /usr/local/sbin/iptables_stat_ install dns 'Firewall DNS' 'DNS_ALL DNS_BR DNS_AWS DNS_OVERRATE DNS_ACCEPT'
+
     def install
+        plugin_title = @argv[2]
+        graph_title = @argv[3]
+        iptables_tags = @argv[4]
+
         target = File.expand_path(__FILE__)
-        system "ln -s #{target} /etc/munin/plugins/iptables_funnel"
+        fname = "#{File.basename target}_#{plugin_title}"
+
+        # plugin symlink
+        system "ln -s #{target} /etc/munin/plugins/#{fname}"
 
         # munin_node_conf
-        munin_node_conf = "\n[iptables_funnel]\nuser root\n\n"
+        munin_node_conf = "\n[#{fname}]\nuser root\n"
+        munin_node_conf += "env.GRAPH_TITLE #{graph_title}\n\n"
+        munin_node_conf += "env.TAGS #{iptables_tags}\n\n"
+
         File.open('/etc/munin/plugin-conf.d/munin-node', 'a').write munin_node_conf
     end
 
@@ -95,4 +99,4 @@ CONFIG
     end
 end
 
-MuninIptablesFunnel.new(ARGV).cli
+MuninIptablesStat.new(ARGV).cli
