@@ -62,6 +62,7 @@ Reload your firewall, then test:
 munin-run munin_iptables_funnel config
 ```
 
+<sub><sup>
 graph_category Firewall DNS  
 graph_title Packets/s  
 graph_vlabel packets/s  
