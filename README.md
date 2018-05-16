@@ -29,7 +29,7 @@ iptables -N DNS_GLOBAL          2> /dev/null
 iptables -N DNS_BR              2> /dev/null
 iptables -N DNS_ACCEPT          2> /dev/null
 
-ipset_lists bl                  > /dev/null
+ipset_lists bl                  > /dev/null # https://github.com/tomlobato/ipset_lists
 ipset_lists country_br          > /dev/null
 
 iptables -A INPUT -p udp --dport 53 -i $IF0 -j DNS
