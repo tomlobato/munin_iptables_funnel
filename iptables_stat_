@@ -75,9 +75,9 @@ CONFIG
     # /usr/local/sbin/iptables_stat_ install dns 'Firewall DNS' 'DNS_ALL DNS_BR DNS_AWS DNS_OVERRATE DNS_ACCEPT'
 
     def install
-        plugin_title = @argv[2]
-        graph_title = @argv[3]
-        iptables_tags = @argv[4]
+        plugin_title = @argv[1]
+        graph_title = @argv[2]
+        iptables_tags = @argv[3]
 
         target = File.expand_path(__FILE__)
         fname = "#{File.basename target}_#{plugin_title}"
